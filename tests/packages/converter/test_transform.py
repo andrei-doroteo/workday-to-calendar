@@ -25,37 +25,37 @@ def get_test_data():
 
 
 @pytest.fixture(params=get_test_data())
-def test_data(request):
+def test_data(request) -> tuple:
     return request.param
 
 
 @pytest.fixture
-def expected(test_data):
+def expected(test_data) -> DataFrame:
     """returns expected value for a schedule in test_data"""
     data, start, end = test_data
     return read_excel(data, skiprows=start, skipfooter=end)
 
 
 @pytest.fixture
-def start(test_data):
+def start(test_data) -> int:
     """returns the index of the start of the ubc schedule"""
     return test_data[1]
 
 
 @pytest.fixture
-def end(test_data):
+def end(test_data) -> int:
     """returns the index of the end of the ubc schedule"""
     return test_data[2]
 
 
 @pytest.fixture
-def data_path(test_data):
+def data_path(test_data) -> str:
     """returns the path of a schedule in test_data"""
     return test_data[0]
 
 
 @pytest.fixture
-def data_dataframe(test_data):
+def data_dataframe(test_data) -> DataFrame:
     """returns a dataframe from a schedule path"""
     return read_excel(test_data[0])
 
