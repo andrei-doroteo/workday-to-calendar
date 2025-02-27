@@ -5,6 +5,7 @@ from src.packages.converter.transform import (
     _find_end,
     _find_start,
     _no_header_df,
+    _trim,
     import_data,
 )
 
@@ -182,6 +183,19 @@ def test_no_header_df_2x3_skip_4():
     result = _no_header_df(dataframe, skiprows=4)
 
     assert expected.equals(result)
+
+
+def test_trim(data_dataframe, data_path):
+    assert _trim(data_dataframe, 0, 0).equals(read_excel(data_path))
+    assert _trim(data_dataframe, 1, 0).equals(
+        read_excel(data_path, skiprows=1)
+    )
+    assert _trim(data_dataframe, 0, 1).equals(
+        read_excel(data_path, skipfooter=1)
+    )
+    assert _trim(data_dataframe, 1, 1).equals(
+        read_excel(data_path, skipfooter=1, skipfooter=1)
+    )
 
 
 # TODO: !!! add tests for when users download during sem 1 versus sem 2
