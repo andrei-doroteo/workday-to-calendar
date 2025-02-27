@@ -135,6 +135,13 @@ def _no_header_df(dataframe: DataFrame, skiprows: int = None) -> DataFrame:
                         the begining of the DataFrame.This behaves like
                         the skiprows argument in the
                         read functions of pandas
+
+    This helper function is to create the same DataFrame that would be
+    created with read_excel() with "header=None" as an argument.
+    This is for UBC schedule excel files that have already been read
+    into a DataFrame but have not been processed yet. This converts
+    them into a usable format for the
+    _find_start() and _find_end() functions.
     """
 
     if dataframe.equals(DataFrame({})):
