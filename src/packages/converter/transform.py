@@ -29,7 +29,10 @@ def import_data(file: str | UploadedFile | DataFrame) -> DataFrame:
     start = _find_start(file)
     end = _find_end(file)
 
-    return read_excel(file, skiprows=start, skipfooter=end)
+    if isinstance(file, DataFrame):
+        return _trim(file, skiprows=start, skipfooter=end)
+    else:
+        return read_excel(file, skiprows=start, skipfooter=end)
 
 
 def _find_start(file: str | UploadedFile | DataFrame) -> int:
@@ -82,7 +85,9 @@ def _find_start(file: str | UploadedFile | DataFrame) -> int:
         column names
         """
 
-        return _get_row_with_header().index[0]
+        return _get_row_with_header().index[
+            0
+        ]  # TODO: Index in the helper instead to make code more concise
 
     return _get_index_of_header()
 
@@ -181,6 +186,21 @@ def _no_header_df(dataframe: DataFrame, skiprows: int = None) -> DataFrame:
         new_values = new_values[skiprows:]
 
     return DataFrame(new_values)
+
+
+def _trim(data: DataFrame, skiprows: int, skipfooter: int) -> DataFrame:
+    """trims data to desired section
+
+    Args:
+        data (DataFrame): a pandas DataFrame
+
+        skiprows (int): the amount of rows to skip from the begining
+
+        skipfooter (int): the amount of rows to skip from the end
+
+    """
+
+    return DataFrame({})  # stub
 
 
 def convert_file(file: str | UploadedFile | DataFrame) -> Calendar:
