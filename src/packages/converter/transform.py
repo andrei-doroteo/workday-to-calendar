@@ -88,7 +88,8 @@ def _find_start(file: str | UploadedFile | DataFrame) -> int:
 
 
 def _find_end(file: str | UploadedFile | DataFrame) -> int:
-    """Finds the index of the end of the schedule data
+    """Finds the index of the end of the schedule data starting from
+    the end of the file
     Args:
         file (str): A path to a UBC workday schedule excel file
 
@@ -102,6 +103,20 @@ def _find_end(file: str | UploadedFile | DataFrame) -> int:
         The index of the ending row of the schedule data
     (the last enrolled course)
 
+    Searches the first column for the first row that doesn't have a
+    student number (see the test data for more a better understanding)
+    and returns the index of that row starting from the end of the
+    column
+
+    Example:
+        data = DataFrame([
+            "12345678",
+            "12345678",
+            "Waitlisted Courses",
+            "12345678",
+        ])
+
+        _find_end(data) -> 1
     """
 
     start = _find_start(file)
@@ -113,10 +128,18 @@ def _find_end(file: str | UploadedFile | DataFrame) -> int:
 
     pattern = "\w+ \w+ \(\d{8}\)"
 
+    first_col = data[0]
+
+    def index_from_end(index):
+        """returns the current index
+        starting from the end of first_col"""
+        return len(first_col) - index
+
     index = 0
-    for val in data[0]:
-        if search(pattern, str(val)) is None:
-            return len(data[0]) - index
+    for row in first_col:
+        if search(pattern, str(row)) is None:
+            return index_from_end(index)
+
         else:
             index += 1
     else:
