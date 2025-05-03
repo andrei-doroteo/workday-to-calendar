@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - DEBUG=0
+      - SECRET_KEY=${SECRET_KEY:-4513265431651}
+      - DJANGO_SETTINGS_MODULE=calendar_converter.settings
+      - ALLOWED_HOSTS=localhost,127.0.0.1,${DOMAIN:-andreidoroteo.com}
+    volumes:
+      - ./data:/app/media
+      - ./src/db.sqlite3:/app/db.sqlite3
+    command: >
+      bash -c "python manage.py collectstatic --noinput &&
+               python manage.py migrate &&
+               gunicorn calendar_converter.wsgi --bind 0.0.0.0:${PORT:-8000} --log-file -"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # If you need a reverse proxy for SSL termination and better performance
+  # Uncomment this section
+  # nginx:
+  #   image: nginx:alpine
+  #   restart: always
+  #   depends_on:
+  #     - web
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/conf.d:/etc/nginx/conf.d
+  #     - ./nginx/ssl:/etc/nginx/ssl
+  #     - ./src/static:/var/www/static
+  #     - ./data:/var/www/media
