@@ -194,7 +194,7 @@ def test_trim(data_dataframe, data_path):
         read_excel(data_path, skipfooter=1)
     )
     assert _trim(data_dataframe, 1, 1).equals(
-        read_excel(data_path, skipfooter=1, skipfooter=1)
+        read_excel(data_path, skiprows=1, skipfooter=1)
     )
 
 
