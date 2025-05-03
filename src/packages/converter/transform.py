@@ -195,7 +195,7 @@ def _trim(data: DataFrame, skiprows: int, skipfooter: int) -> DataFrame:
         data (DataFrame): a pandas DataFrame
 
         skiprows (int): the amount of rows to skip from the begining
-
+trim
         skipfooter (int): the amount of rows to skip from the end
 
     """
