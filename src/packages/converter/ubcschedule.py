@@ -37,8 +37,8 @@ class UBCSchedule:
     def calendar(self) -> Calendar:
         """getter method for __calendar
 
-        Initialises to None.
-        Must call update_calendar() method to use.
+        __calendar initialises to None.
+        You must call update_calendar() method first to return a value
         """
         return self.__calendar
 
