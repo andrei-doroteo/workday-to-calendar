@@ -200,7 +200,7 @@ def _trim(data: DataFrame, skiprows: int, skipfooter: int) -> DataFrame:
 
     """
 
-    return DataFrame({})  # stub
+    return data.iloc[skiprows:-skipfooter]
 
 
 def convert_file(file: str | UploadedFile | DataFrame) -> Calendar:
